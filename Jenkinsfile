@@ -27,7 +27,7 @@ pipeline {
 
         stage('Docker-build') {
             steps {
-                sh 'mvn package docker:build'
+                sh 'mvn clean package docker:build'
             }
         }
     }
