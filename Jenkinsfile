@@ -27,7 +27,7 @@ pipeline {
 
         stage('Docker-build') {
             steps {
-                sh 'DOCKER_HOST=tcp://0.0.0.0:4243 mvn clean package docker:build'
+                sh 'mvn clean package docker:build'
             }
         }
     }
