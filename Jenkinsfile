@@ -33,31 +33,8 @@ node {
           echo "${err}"
         }
       }
-    }
-
-/*
-    stage ('Build image') {
-        try {
-              docker.build("festsentralen/mayocoba")
-            } catch (error) {
-
-            } finally {
-
-            }
-    }
-
-    stage('Build and push image') {
-        try {
-            registry_url = 'https://index.docker.io/v1/'
-            docker_creds_id = 'dockerhub'
-            docker.withRegistry(registry_url, docker_creds_id).build("festsentralen/mayocoba:${env.BUILD_NUMBER}").push()
-            } catch (error) {
-
-            }
-    }
-
 }
-/*
+
 
 def buildImage(version) {
     def image
