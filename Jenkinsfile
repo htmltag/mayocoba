@@ -1,10 +1,11 @@
 pipeline {
-    def app
     agent any
     tools {
         maven 'M3'
         jdk 'jdk8'
     }
+
+    def app
     stages {
         stage ('Initialize') {
             steps {
@@ -44,6 +45,6 @@ pipeline {
                     app.push("latest")
                 }
             }
-            
+
     }
 }
