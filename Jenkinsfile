@@ -26,13 +26,16 @@ pipeline {
         }
 
         stage('Build image') {
-                /* This builds the actual image; synonymous to
-                 * docker build on the command line */
+            steps {
+                        /* This builds the actual image; synonymous to
+                         * docker build on the command line */
 
-                app = docker.build("festsentralen/mayocoba")
-            }
+                        app = docker.build("festsentralen/mayocoba")
+                    }
+        }
 
         stage('Push image') {
+            steps {
                 pom = readMavenPom file: 'pom.xml'
                 pom.version
                 registry_url = "https://index.docker.io/v1/" // Docker Hub
@@ -43,6 +46,6 @@ pipeline {
                     app.push("latest")
                 }
             }
-
+        }
     }
 }
