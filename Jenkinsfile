@@ -1,5 +1,6 @@
 node {
     def app
+
     stage ('Initialize') {
         sh '''
             echo "PATH = ${PATH}"
@@ -8,7 +9,7 @@ node {
     }
 
     stage ('Build') {
-        sh 'mvn -Dmaven.test.failure.ignore=true install'
+        mvn '-Dmaven.test.failure.ignore=true install'
         junit 'target/surefire-reports/**/*.xml'
     }
 
