@@ -4,9 +4,8 @@ pipeline {
         maven 'M3'
         jdk 'jdk8'
     }
-
-    def app
     stages {
+    def app
         stage ('Initialize') {
             steps {
                 sh '''
