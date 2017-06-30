@@ -5,6 +5,7 @@ pipeline {
         jdk 'jdk8'
     }
     stages {
+    def app
         stage ('Initialize') {
             steps {
                 sh '''
@@ -27,20 +28,15 @@ pipeline {
 
         stage('Build image') {
             steps {
-                        /* This builds the actual image; synonymous to
-                         * docker build on the command line */
-
-                        app = docker.build("festsentralen/mayocoba")
-                    }
+                app = docker.build("festsentralen/mayocoba")
+            }
         }
 
         stage('Push image') {
             steps {
                 pom = readMavenPom file: 'pom.xml'
-                pom.version
-                registry_url = "https://index.docker.io/v1/" // Docker Hub
+                registry_url = "https://index.docker.io/v1/"
                 docker_creds_id = "dockerhub"
-
                 docker.withRegistry(registry_url, docker_creds_id) {
                     app.push("${pom.version}")
                     app.push("latest")
