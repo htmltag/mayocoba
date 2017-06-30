@@ -1,10 +1,5 @@
 node {
     def app
-
-    tools {
-            maven 'M3'
-            jdk 'jdk8'
-        }
     stage ('Initialize') {
         steps {
             sh '''
