@@ -8,13 +8,27 @@ node {
             '''
     }
 
-    stage ('Build') {
+    stage ('Package') {
+        sh 'mvn clean package -DskipTests'
+    }
+
+    stage ('Test') {
         try {
-              sh 'mvn -Dmaven.test.failure.ignore=true install'
+              sh 'mvn clean -Dmaven.test.failure.ignore=true install'
             } catch (error) {
 
             } finally {
               junit 'target/surefire-reports/**/*.xml'
+            }
+    }
+
+    stage ('Build image') {
+        try {
+              docker.build("festsentralen/mayocoba}")
+            } catch (error) {
+
+            } finally {
+
             }
     }
 
