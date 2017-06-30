@@ -5,7 +5,6 @@ pipeline {
         jdk 'jdk8'
     }
     stages {
-    def app
         stage ('Initialize') {
             steps {
                 sh '''
