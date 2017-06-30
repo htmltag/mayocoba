@@ -55,9 +55,9 @@ node {
 
             }
     }
-    /*
-}
 
+}
+/*
 
 def buildImage(version) {
     def image
