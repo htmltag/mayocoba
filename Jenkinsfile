@@ -3,6 +3,7 @@
 node {
     checkout scm
     env.PATH = "${tool 'M3'}/bin:${env.PATH}"
+    env.DOCKER_API_VERSION="1.23"
     stage ('Initialize') {
             sh '''
                 echo "PATH = ${PATH}"
