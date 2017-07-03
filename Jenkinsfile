@@ -26,8 +26,8 @@ node {
 
     docker.withTool('docker') {
         try {
-          def newImage = buildImage()
-          echo "newImage: ${newImage.id}"
+          buildImage()
+          echo "newImage Yeah!"
         } catch(err) {
           echo "${err}"
         }
@@ -36,9 +36,7 @@ node {
 
 
 def buildImage() {
-    def image
   stage("Build Image") {
-    image = docker.build("festsentralen/mayocoba")
+    sh 'docker build -t  festsentralen/mayocoba .'
   }
-  return image
 }
