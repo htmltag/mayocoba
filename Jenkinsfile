@@ -35,7 +35,7 @@ node {
 
 
     stage "Build"
-        sh 'docker build . '
+         docker.build("festsentralen/mayocoba")
 
 
 }
