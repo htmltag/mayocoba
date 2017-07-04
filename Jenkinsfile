@@ -1,3 +1,40 @@
+node {
+
+    checkout scm
+
+    env.DOCKER_API_VERSION="1.23"
+
+    sh "git rev-parse --short HEAD > commit-id"
+
+    tag = readFile('commit-id').replace("\n", "").replace("\r", "")
+    appName = "mayocoba"
+    registryHost = "docker.io/"
+    imageName = "${registryHost}${appName}:${tag}"
+    env.BUILDIMG=imageName
+
+    stage ('Package') {
+            sh 'mvn clean package -DskipTests'
+        }
+
+    stage ('Test') {
+        try {
+              sh 'mvn clean -Dmaven.test.failure.ignore=true install'
+            } catch (error) {
+
+            } finally {
+              junit 'target/surefire-reports/**/*.xml'
+            }
+    }
+
+
+    stage "Build"
+
+        sh "docker build -t ${imageName} -f . festsentralen/mayocoba"
+
+
+}
+
+
 #!groovy
 
 node {
