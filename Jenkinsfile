@@ -36,7 +36,7 @@ node {
 
     stage "Build"
 
-        sh "docker build -t ${imageName} -f . festsentralen/mayocoba"
+        sh "docker build ."
 
 
 }
