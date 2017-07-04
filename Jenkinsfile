@@ -36,7 +36,7 @@ node {
 
     stage "Build"
 
-        sh "docker build ."
+        sh "docker build -t ${tag} ."
 
 
 }
