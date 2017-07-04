@@ -34,8 +34,15 @@ node {
     }
 
 
-    stage "Build"
-         docker.build("festsentralen/mayocoba")
+    stage ('Build'){
+        try{
+            docker.build("festsentralen/mayocoba")
+        }catch(error){
+            sh '''
+                echo "Build docker image failed!"
+            '''
+        }
 
+    }
 
 }
