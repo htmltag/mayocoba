@@ -34,9 +34,8 @@ node {
     }
 
 
-    stage "Build"
-
-        sh "docker build -t ${tag} ."
-
+    stage ('Build'){
+        sh 'docker build -t ${tag} . festsentralen/mayocoba'
+        }
 
 }
