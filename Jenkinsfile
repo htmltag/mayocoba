@@ -11,7 +11,7 @@ node {
     env.BUILDIMG=imageName
 
     env.PATH = "${tool 'M3'}/bin:${env.PATH}"
-    
+    env.DOCKER_API_VERSION="1.23"
     stage ('Initialize') {
             sh '''
                 echo "PATH = ${PATH}"
@@ -38,9 +38,7 @@ node {
         try{
             docker.build("festsentralen/mayocoba")
         }catch(error){
-            sh '''
-                echo "Build docker image failed!"
-            '''
+            
         }
 
     }
