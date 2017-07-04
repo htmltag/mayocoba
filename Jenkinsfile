@@ -37,7 +37,7 @@ node {
     stage ('Build'){
         try{
             withDockerRegistry([credentialsId: 'dockerhub', url: "https://https://index.docker.io/v1/"]) {
-              def image = docker.build("https://index.docker.io/v1/festsentralen/mayocoba:${tag}")
+              def image = docker.build("festsentralen/mayocoba:${tag}")
               image.push()
             }
         }catch(e){
