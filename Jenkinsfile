@@ -19,17 +19,6 @@ node {
             '''
     }
 
-    stage ('Test') {
-        try {
-              sh 'mvn surefire:test'
-            } catch (error) {
-
-            } finally {
-              junit 'target/surefire-reports/**/*.xml'
-            }
-    }
-
-
     stage ('Build'){
         try{
             withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
