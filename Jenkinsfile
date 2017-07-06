@@ -19,6 +19,21 @@ node {
             '''
     }
 
+    stage ('Package') {
+            sh 'mvn clean package -DskipTests'
+        }
+
+    stage ('Test') {
+        try {
+              sh 'mvn clean -Dmaven.test.failure.ignore=true install'
+            } catch (error) {
+
+            } finally {
+              junit 'target/surefire-reports/**/*.xml'
+            }
+    }
+
+
     stage ('Build'){
         try{
             withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
