@@ -10,7 +10,8 @@ node {
     imageName = "${registryHost}${appName}:${tag}"
     env.BUILDIMG=imageName
 
-    env.PATH = "${tool 'M3', 'jdk8'}/bin:${env.PATH}"
+    env.PATH = "${tool 'M3'}/bin:${env.PATH}"
+    env.PATH = "${tool 'jdk8'}/bin:${env.PATH}"
     env.DOCKER_API_VERSION="1.23"
     stage ('Initialize') {
             sh '''
