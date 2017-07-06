@@ -10,6 +10,7 @@ node {
     imageName = "${registryHost}${appName}:${tag}"
     env.BUILDIMG=imageName
 
+    env.PATH = "${tool 'M3'}/bin:${env.PATH}"
     env.DOCKER_API_VERSION="1.23"
     stage ('Initialize') {
             sh '''
@@ -17,17 +18,6 @@ node {
                 echo "M3_HOME = ${M3_HOME}"
             '''
     }
-
-    stage ('Test') {
-        try {
-              sh 'mvn clean -Dmaven.test.failure.ignore=true install'
-            } catch (e) {
-                throw e
-            } finally {
-              junit 'target/surefire-reports/**/*.xml'
-            }
-    }
-
 
     stage ('Build'){
         try{
