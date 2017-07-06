@@ -10,7 +10,6 @@ node {
     imageName = "${registryHost}${appName}:${tag}"
     env.BUILDIMG=imageName
 
-    env.PATH = "${tool 'M3'}/bin:${env.PATH}"
     env.DOCKER_API_VERSION="1.23"
     stage ('Initialize') {
             sh '''
