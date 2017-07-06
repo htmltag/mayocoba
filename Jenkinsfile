@@ -20,14 +20,19 @@ node {
     }
 
     stage ('Package') {
+        try{
             sh 'mvn clean package -DskipTests'
+        }catch (e)
+        {
+            throw e
         }
+    }
 
     stage ('Test') {
         try {
               sh 'mvn clean -Dmaven.test.failure.ignore=true install'
-            } catch (error) {
-
+            } catch (e) {
+                throw e
             } finally {
               junit 'target/surefire-reports/**/*.xml'
             }
