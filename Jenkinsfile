@@ -1,4 +1,4 @@
-node ('jnlp'){
+node ('greenland-jenkins-slave'){
 
     checkout scm
 
