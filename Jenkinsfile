@@ -1,5 +1,5 @@
 podTemplate(label: 'greenland-jenkins-slave', containers: [
-    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat')
+    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat cat')
 ]) {
 
 node ('greenland-jenkins-slave'){
@@ -26,16 +26,18 @@ node ('greenland-jenkins-slave'){
         stage ('Package') {
                     sh "mvn -DskipTests clean package"
                 }
-    }
 
-    stage ('Test') {
-        try {
-              sh 'mvn -Dmaven.test.failure.ignore=true'
-            } catch (error) {
 
-            } finally {
-              junit 'target/surefire-reports/**/*.xml'
-            }
+        stage ('Test') {
+            try {
+                  sh 'mvn -Dmaven.test.failure.ignore=true'
+                } catch (error) {
+
+                } finally {
+                  junit 'target/surefire-reports/**/*.xml'
+                }
+        }
+
     }
 
     stage ('Build'){
