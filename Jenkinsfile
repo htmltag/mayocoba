@@ -1,7 +1,3 @@
-podTemplate(label: 'greenland-jenkins-slave', containers: [
-    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat cat')
-]) {
-
 node ('greenland-jenkins-slave'){
 
     checkout scm
@@ -52,5 +48,4 @@ node ('greenland-jenkins-slave'){
 
     }
 
-}
 }
