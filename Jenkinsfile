@@ -1,5 +1,6 @@
 podTemplate(label: 'greenland-jenkins-slave', containers: [
-    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat')
+    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:3.7-1', args: '${computer.jnlpmac} ${computer.name}')
 ]) {
 
 node ('greenland-jenkins-slave'){
@@ -41,16 +42,18 @@ node ('greenland-jenkins-slave'){
 
     }
 
-    stage ('Build'){
-        try{
-            withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-              def image = docker.build("festsentralen/mayocoba:${tag}")
-              image.push()
+    container('jnlp') {
+        stage ('Build'){
+            try{
+                withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
+                  def image = docker.build("festsentralen/mayocoba:${tag}")
+                  image.push()
+                }
+            }catch(e){
+                throw e
             }
-        }catch(e){
-            throw e
-        }
 
+        }
     }
 
 }
