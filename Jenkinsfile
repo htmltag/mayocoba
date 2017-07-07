@@ -30,19 +30,6 @@ node ('greenland-jenkins-slave'){
         }
     }
 
-    container('maven') {
-        stage ('Test') {
-            try {
-                  sh "mvn -B clean test -Dmaven.test.failure.ignore"
-                } catch (error) {
-
-                } finally {
-                  junit 'target/surefire-reports/**/*.xml'
-                }
-        }
-
-    }
-
     container('docker') {
         stage ('Build'){
             try{
