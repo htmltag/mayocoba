@@ -28,7 +28,9 @@ node ('greenland-jenkins-slave'){
         stage ('Package') {
                     sh "mvn -DskipTests clean package"
         }
+    }
 
+    container('maven') {
         stage ('Test') {
             try {
                   sh "mvn -B clean test -Dmaven.test.failure.ignore"
