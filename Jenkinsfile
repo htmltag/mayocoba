@@ -1,3 +1,7 @@
+podTemplate(label: 'greenland-jenkins-slave', containers: [
+    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat')
+]) {
+
 node ('greenland-jenkins-slave'){
 
     checkout scm
@@ -19,9 +23,11 @@ node ('greenland-jenkins-slave'){
             '''
     }
 
-    stage ('Package') {
-                sh "${mvnHome}/bin/mvn -B -DskipTests clean package"
-            }
+    container('maven') {
+        stage ('Package') {
+                    sh "${mvnHome}/bin/mvn -B -DskipTests clean package"
+                }
+    }
 
     stage ('Test') {
         try {
