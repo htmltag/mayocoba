@@ -31,7 +31,7 @@ node ('greenland-jenkins-slave'){
 
         stage ('Test') {
             try {
-                  sh "mvn clean package -Dmaven.test.failure.ignore=true"
+                  sh "mvn -Dmaven.test.failure.ignore=true"
                 } catch (error) {
 
                 } finally {
