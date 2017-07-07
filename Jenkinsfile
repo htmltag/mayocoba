@@ -31,9 +31,9 @@ node ('greenland-jenkins-slave'){
     }
 
     container('docker') {
+        env.DOCKER_API_VERSION="1.23"
         stage ('Build'){
             try{
-                env.DOCKER_API_VERSION="1.23"
                 withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
                   def image = docker.build("festsentralen/mayocoba:${tag}")
                   image.push()
