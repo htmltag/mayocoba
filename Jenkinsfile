@@ -14,7 +14,6 @@ node ('greenland-jenkins-slave'){
     imageName = "${registryHost}${appName}:${tag}"
     env.BUILDIMG=imageName
 
-    def mvnHome = tool 'M3'
     env.DOCKER_API_VERSION="1.23"
     stage ('Initialize') {
             sh '''
@@ -25,13 +24,13 @@ node ('greenland-jenkins-slave'){
 
     container('maven') {
         stage ('Package') {
-                    sh "${mvnHome}/bin/mvn -B -DskipTests clean package"
+                    sh "mvn -DskipTests clean package"
                 }
     }
 
     stage ('Test') {
         try {
-              sh '${mvnHome}/bin/mvn -Dmaven.test.failure.ignore=true'
+              sh 'mvn -Dmaven.test.failure.ignore=true'
             } catch (error) {
 
             } finally {
