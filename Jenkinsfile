@@ -23,14 +23,14 @@ node ('greenland-jenkins-slave'){
             '''
     }
 
-    container('maven') {
-        stage ('Package') {
-                    sh "mvn -DskipTests clean package"
+    stage ('Package') {
+        container('maven') {
+            sh "mvn -DskipTests clean package"
         }
     }
 
-    container('docker') {
-        stage ('Build'){
+    stage ('Build'){
+        container('docker') {
             try{
                 withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
                   def image = docker.build("festsentralen/mayocoba:${tag}")
