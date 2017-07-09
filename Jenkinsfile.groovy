@@ -31,8 +31,16 @@ node ('greenland-jenkins-slave'){
 
     def pcImg
     stage ('Build'){
-        container('docker') {
+        container(name: 'docker') {
             pcImg = docker.build("festsentralen/mayacoba:${tag}")
+        }
+    }
+
+    stage ('Push'){
+        container(name: 'docker') {
+            withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
+                pcImg = docker.push('latest')
+            }
         }
     }
 
