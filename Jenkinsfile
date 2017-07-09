@@ -31,8 +31,8 @@ node ('greenland-jenkins-slave'){
 
     stage ('Test') {
         container('maven') {
-            sh "mvn -B clean test -Dmaven.test.failure.ignore"
-            junit 'target/surefire-reports/**/*.xml'
+            sh "mvn clean test -Dmaven.test.failure.ignore"
+            junit "target/surefire-reports/**/*.xml"
         }
     }
 
