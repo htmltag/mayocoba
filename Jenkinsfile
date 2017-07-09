@@ -25,14 +25,7 @@ node ('greenland-jenkins-slave'){
 
     stage ('Package') {
         container('maven') {
-            sh "mvn -DskipTests clean package"
-        }
-    }
-
-    stage ('Test') {
-        container('maven') {
-            sh "mvn clean test -Dmaven.test.failure.ignore"
-            junit "target/surefire-reports/**/*.xml"
+            sh "mvn clean package"
         }
     }
 
