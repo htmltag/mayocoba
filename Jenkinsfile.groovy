@@ -31,16 +31,21 @@ node ('greenland-jenkins-slave'){
     }
 
     def pcImg
-    stage ('Build'){
-        container(name: 'docker') {
-            withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-                pcImg = docker.build("festsentralen/mayacoba:${tag}")
+    container('docker') {
+        stage ('Build'){
+            try{
+                withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
+                    pcImg = docker.build("festsentralen/mayacoba:${tag}")
+                }
+            }catch (e){
+                throw e
             }
+
         }
     }
 
     stage ('Push'){
-        container(name: 'docker') {
+        container('docker') {
             withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
                 pcImg = docker.push('latest')
             }
