@@ -35,7 +35,7 @@ node ('greenland-jenkins-slave'){
         stage ('Build'){
             try{
                 withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-                    pcImg = docker.build("festsentralen/mayacoba:${tag}")
+                    pcImg = docker.build("festsentralen/mayacoba:${tag}").push('latest')
                 }
             }catch (e){
                 throw e
