@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 podTemplate(label: 'greenland-jenkins-slave', containers: [
     containerTemplate(name: 'docker', image: 'docker:17.06-dind', ttyEnabled: true, command: 'cat', privileged: true, instanceCap: 1),
     containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
@@ -31,7 +33,6 @@ node ('greenland-jenkins-slave'){
     }
 
     container('docker') {
-        env.DOCKER_API_VERSION="1.23"
         stage ('Build'){
             try{
                 withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
