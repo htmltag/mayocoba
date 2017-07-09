@@ -31,15 +31,10 @@ node ('greenland-jenkins-slave'){
 
     stage ('Build'){
         container('docker') {
-            try{
-                withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-                  def image = docker.build("festsentralen/mayocoba:${tag}")
-                  image.push()
-                }
-            }catch(e){
-                throw e
+            withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
+              def image = docker.build("festsentralen/mayocoba:${tag}")
+              image.push()
             }
-
         }
     }
 
