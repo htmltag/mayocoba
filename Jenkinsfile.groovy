@@ -15,14 +15,20 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
         maintainer = "festsentralen"
         imageName = "${maintainer}${appName}:${tag}"
 
+        stage ('Initialize') {
+            sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M3_HOME = ${M3_HOME}"
+                '''
+        }
+
         stage ('Package') {
             container('maven') {
                 sh "mvn clean package test"
                 junit 'target/surefire-reports/**/*.xml'
             }
         }
-
-        def doc
+        
         container('docker') {
             stage ('Build'){
                 try{
