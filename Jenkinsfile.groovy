@@ -27,16 +27,14 @@ node ('greenland-jenkins-slave'){
     stage ('Package') {
         container('maven') {
             sh "mvn -DskipTests clean package"
+            junit 'target/surefire-reports/**/*.xml'
         }
     }
-
-    def pcImg
+    
     container('docker') {
         stage ('Build'){
             try{
-                withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-                    pcImg = docker.build("festsentralen/mayacoba:${tag}").push('latest')
-                }
+                sh "docker build -t festsentralen/mayacoba ."
             }catch (e){
                 throw e
             }
@@ -46,9 +44,7 @@ node ('greenland-jenkins-slave'){
 
     stage ('Push'){
         container('docker') {
-            withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-                pcImg = docker.push('latest')
-            }
+            sh "echo 'push'"
         }
     }
 

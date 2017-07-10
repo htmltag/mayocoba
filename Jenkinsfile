@@ -26,6 +26,7 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
         stage ('Package') {
             container('maven') {
                 sh "mvn clean package"
+                junit 'target/surefire-reports/**/*.xml'
             }
         }
 
