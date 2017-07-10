@@ -14,10 +14,11 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
         appName = "mayocoba"
         maintainer = "festsentralen"
         imageName = "${maintainer}${appName}:${tag}"
-        
+
         stage ('Package') {
             container('maven') {
                 sh "mvn clean package test"
+                junit 'target/surefire-reports/**/*.xml'
             }
         }
 
