@@ -26,7 +26,7 @@ node ('greenland-jenkins-slave'){
 
     stage ('Package') {
         container('maven') {
-            sh "mvn clean package"
+            sh "mvn clean package test"
             junit 'target/surefire-reports/**/*.xml'
         }
     }
