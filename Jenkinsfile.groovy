@@ -26,11 +26,11 @@ node ('greenland-jenkins-slave'){
 
     stage ('Package') {
         container('maven') {
-            sh "mvn -DskipTests clean package"
+            sh "mvn clean package"
             junit 'target/surefire-reports/**/*.xml'
         }
     }
-    
+
     container('docker') {
         stage ('Build'){
             try{
