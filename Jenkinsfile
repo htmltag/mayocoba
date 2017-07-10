@@ -32,6 +32,7 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
 
 
         stage ('Build'){
+            sh 'echo "Docker build"'
             container('docker') {
                 try{
                     withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
