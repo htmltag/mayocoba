@@ -18,44 +18,41 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
         def maintainer = "festsentralen"
         def imageName = "${maintainer}/${appName}:${tag}"
 
-        stages {
-
-            stage ('Initialize') {
-                sh '''
-                        echo "PATH = ${PATH}"
-                        echo "M3_HOME = ${M3_HOME}"
-                    '''
-            }
-
-            stage ('Package') {
-                container('maven') {
-                    try{
-                        sh "mvn clean package test"
-                    }catch(e){
-                        throw e
-                    }finally{
-                        junit 'target/surefire-reports/**/*.xml'
-                    }
-                }
-            }
-
-
-            stage ('Build'){
-                sh 'echo "Docker build"'
-                container('docker') {
-                    try{
-                        withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-                            sh "docker build -t ${imageName}  ."
-                            def img = docker.image(imageName)
-                            img.push()
-                        }
-                    }catch (e){
-                        throw e
-                    }
-
-                }
-            }
-
+        stage ('Initialize') {
+            sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M3_HOME = ${M3_HOME}"
+                '''
         }
+
+        stage ('Package') {
+            container('maven') {
+                try{
+                    sh "mvn clean package test"
+                }catch(e){
+                    throw e
+                }finally{
+                    junit 'target/surefire-reports/**/*.xml'
+                }
+            }
+        }
+
+
+        stage ('Build'){
+            sh 'echo "Docker build"'
+            container('docker') {
+                try{
+                    withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
+                        sh "docker build -t ${imageName}  ."
+                        def img = docker.image(imageName)
+                        img.push()
+                    }
+                }catch (e){
+                    throw e
+                }
+
+            }
+        }
+
     }
 }
