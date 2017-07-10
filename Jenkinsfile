@@ -30,8 +30,9 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
             }
         }
 
-        container('docker') {
-            stage ('Build'){
+
+        stage ('Build'){
+            container('docker') {
                 try{
                     withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
                         sh "docker build -t ${imageName}  ."
