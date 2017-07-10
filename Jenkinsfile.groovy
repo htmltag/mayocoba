@@ -4,49 +4,46 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
     volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
 ) {
 
-node ('greenland-jenkins-slave'){
+    node ('greenland-jenkins-slave'){
 
-    checkout scm
+        checkout scm
 
-    sh "git rev-parse --short HEAD > commit-id"
+        sh "git rev-parse --short HEAD > commit-id"
 
-    tag = readFile('commit-id').replace("\n", "").replace("\r", "")
-    appName = "mayocoba"
-    registryHost = "docker.io/"
-    imageName = "${registryHost}${appName}:${tag}"
-    env.BUILDIMG=imageName
+        tag = readFile('commit-id').replace("\n", "").replace("\r", "")
+        appName = "mayocoba"
+        maintainer = "festsentralen"
+        imageName = "${maintainer}${appName}:${tag}"
+        env.BUILDIMG=imageName
 
-    env.DOCKER_API_VERSION="1.23"
-    stage ('Initialize') {
-            sh '''
-                echo "PATH = ${PATH}"
-                echo "M3_HOME = ${M3_HOME}"
-            '''
-    }
-
-    stage ('Package') {
-        container('maven') {
-            sh "mvn clean package test"
-            junit 'target/surefire-reports/**/*.xml'
+        env.DOCKER_API_VERSION="1.23"
+        stage ('Initialize') {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M3_HOME = ${M3_HOME}"
+                '''
         }
-    }
 
-    container('docker') {
-        stage ('Build'){
-            try{
-                sh "docker build -t festsentralen/mayacoba ."
-            }catch (e){
-                throw e
+        stage ('Package') {
+            container('maven') {
+                sh "mvn -DskipTests clean package"
+                junit 'target/surefire-reports/**/*.xml'
             }
-
         }
-    }
 
-    stage ('Push'){
+        def doc
         container('docker') {
-            sh "echo 'push'"
+            stage ('Build'){
+                try{
+                    withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
+                        doc = docker.build("${maintainer}/${appName}:${tag}")
+                        doc.push('latest')
+                    }
+                }catch (e){
+                    throw e
+                }
+
+            }
         }
     }
-
-}
 }
