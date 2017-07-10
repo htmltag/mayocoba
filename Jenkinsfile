@@ -8,6 +8,7 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
 
     node ('greenland-jenkins-slave'){
 
+
         checkout scm
 
         sh "git rev-parse --short HEAD > commit-id"
@@ -17,40 +18,44 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
         def maintainer = "festsentralen"
         def imageName = "${maintainer}/${appName}:${tag}"
 
-        stage ('Initialize') {
-            sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M3_HOME = ${M3_HOME}"
-                '''
-        }
+        stages {
 
-        stage ('Package') {
-            container('maven') {
-                try{
-                    sh "mvn clean package test"
-                }catch(e){
-                    throw e
-                }finally{
-                    junit 'target/surefire-reports/**/*.xml'
-                }
+            stage ('Initialize') {
+                sh '''
+                        echo "PATH = ${PATH}"
+                        echo "M3_HOME = ${M3_HOME}"
+                    '''
             }
-        }
 
-
-        stage ('Build'){
-            sh 'echo "Docker build"'
-            container('docker') {
-                try{
-                    withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-                        sh "docker build -t ${imageName}  ."
-                        def img = docker.image(imageName)
-                        img.push()
+            stage ('Package') {
+                container('maven') {
+                    try{
+                        sh "mvn clean package test"
+                    }catch(e){
+                        throw e
+                    }finally{
+                        junit 'target/surefire-reports/**/*.xml'
                     }
-                }catch (e){
-                    throw e
                 }
-
             }
+
+
+            stage ('Build'){
+                sh 'echo "Docker build"'
+                container('docker') {
+                    try{
+                        withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
+                            sh "docker build -t ${imageName}  ."
+                            def img = docker.image(imageName)
+                            img.push()
+                        }
+                    }catch (e){
+                        throw e
+                    }
+
+                }
+            }
+
         }
     }
 }
