@@ -10,10 +10,10 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
 
         sh "git rev-parse --short HEAD > commit-id"
 
-        tag = readFile('commit-id').replace("\n", "").replace("\r", "")
-        appName = "mayocoba"
-        maintainer = "festsentralen"
-        imageName = "${maintainer}/${appName}:${tag}"
+        def tag = readFile('commit-id').replace("\n", "").replace("\r", "")
+        def appName = "mayocoba"
+        def maintainer = "festsentralen"
+        def imageName = "${maintainer}/${appName}:${tag}"
 
         stage ('Initialize') {
             sh '''
@@ -33,8 +33,9 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
             stage ('Build'){
                 try{
                     withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-                        doc = docker.build(" ${maintainer}/${appName}:${tag}")
-                        doc.push('latest')
+                        sh "docker build -t ${imageName}  ."
+                        def img = docker.image(imageName)
+                        img.push('latest')
                     }
                 }catch (e){
                     throw e
