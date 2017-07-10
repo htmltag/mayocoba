@@ -34,7 +34,7 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
                     withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
                         sh "docker build -t ${imageName}  ."
                         def img = docker.image(imageName)
-                        img.push('latest')
+                        img.push()
                     }
                 }catch (e){
                     throw e
