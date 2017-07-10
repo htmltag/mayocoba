@@ -26,7 +26,7 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
 
         stage ('Package') {
             container('maven') {
-                sh "mvn -DskipTests clean package"
+                sh "mvn clean package test"
                 junit 'target/surefire-reports/**/*.xml'
             }
         }
