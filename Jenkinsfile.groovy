@@ -13,7 +13,7 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
         tag = readFile('commit-id').replace("\n", "").replace("\r", "")
         appName = "mayocoba"
         maintainer = "festsentralen"
-        imageName = "${maintainer}${appName}:${tag}"
+        imageName = "${maintainer}/${appName}:${tag}"
 
         stage ('Initialize') {
             sh '''
@@ -28,12 +28,12 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
                 junit 'target/surefire-reports/**/*.xml'
             }
         }
-        
+
         container('docker') {
             stage ('Build'){
                 try{
                     withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
-                        doc = docker.build("${maintainer}/${appName}:${tag}")
+                        doc = docker.build(" ${maintainer}/${appName}:${tag}")
                         doc.push('latest')
                     }
                 }catch (e){
