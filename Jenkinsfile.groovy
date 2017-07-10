@@ -14,16 +14,7 @@ podTemplate(label: 'greenland-jenkins-slave', containers: [
         appName = "mayocoba"
         maintainer = "festsentralen"
         imageName = "${maintainer}${appName}:${tag}"
-        env.BUILDIMG=imageName
-
-        env.DOCKER_API_VERSION="1.23"
-        stage ('Initialize') {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M3_HOME = ${M3_HOME}"
-                '''
-        }
-
+        
         stage ('Package') {
             container('maven') {
                 sh "mvn clean package test"
